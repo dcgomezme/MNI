@@ -156,9 +156,9 @@ end
 
 # ╔═╡ 4c4d09fe-05b2-11eb-1609-b1e4adb4b50e
 begin
-	Cn(y) = ((3*y+((y^2)/2))^3/(3+y)) - 40.7747;
-	DCn(y) = (3*y + 9)*(y^2/2 + 3*y)^2/(y + 3) - (y^2/2 + 3*y)^3/(y + 3)^2;
-	yc, itera = Newton_Raphson(0.5,Cn,DCn,0.01,10);
+	#Cn(y) = ((3*y+((y^2)/2))^3/(3+y)) - 40.7747;
+	#DCn(y) = (3*y + 9)*(y^2/2 + 3*y)^2/(y + 3) - (y^2/2 + 3*y)^3/(y + 3)^2;
+	#yc, itera = Newton_Raphson(0.5,Cn,DCn,0.01,10);
 	"La profundidad crítica encontrada con el método de Newton-Raphson fue $yc luego de  $itera iteraciones"
 end
 
@@ -314,7 +314,7 @@ Resolviendo el sistema los valores de los caudales $Q_i$  con $i=1,2,\cdots,10$ 
 # ╟─583ec42c-05ae-11eb-1a75-051d43500d23
 # ╠═095a0834-05af-11eb-2a36-d1d1e179e27d
 # ╟─f25fb776-05b0-11eb-37bd-09b89dc26a2f
-# ╠═5291f79e-05b1-11eb-0233-05ca4a69411b
+# ╟─5291f79e-05b1-11eb-0233-05ca4a69411b
 # ╠═4c4d09fe-05b2-11eb-1609-b1e4adb4b50e
 # ╟─a9445d72-05b4-11eb-0c50-e7b437caf6f2
 # ╟─0ab3162a-05b5-11eb-0cc6-1bce617dfa96
