@@ -1,5 +1,5 @@
 ### A Pluto.jl notebook ###
-# v0.11.14
+# v0.12.4
 
 using Markdown
 using InteractiveUtils
@@ -30,13 +30,13 @@ Para cada uno de los ejercicios que se presentan a continuación, usted debe exp
 # ╔═╡ 648d66d2-0588-11eb-2b95-4517fc61e165
 md"""
 ## I Viga
-Con base en las dimensiones y cargas que es especifican en la siguiente figura, use el método de la bisección para encontrar la posición dentro de la viga donde no hay momento. Asuma la tolerancia que considere apropiada e indique el número de iteraciones que necesitó para resolver el ejercicio.
+Con base en las dimensiones y cargas que se especifican en la siguiente figura, use el método de la bisección para encontrar la posición dentro de la viga donde no hay momento. Asuma la tolerancia que considere apropiada e indique el número de iteraciones que necesitó para resolver el ejercicio.
 """
 
 # ╔═╡ 569072c0-0594-11eb-05e2-1985663cc0cc
 md"""
 ### Desarrollo
-Resolviendo la viga encontramos que las ecuaciones de momento flector que gobiernan el comportamiento en la viga son las siguientes:
+Realizando un corte a una cierta distancia $x$ y considerando el cambio de función en cada segmento, se llega a que el momento flector dentro de la viga se define por medio de la siguiente tabla:
 
 |Tramo| M(x) |
 |:----|-------:|
@@ -45,7 +45,7 @@ Resolviendo la viga encontramos que las ecuaciones de momento flector que gobier
 |$6\leq x <10$|$\displaystyle -185x + 1650$|
 |$10\leq x\leq12$|$\displaystyle 100x - 1200$|
 
-Si graficamos el diagrama de Momento flector obtendremos:
+Si graficamos el diagrama de momento flector se obtiene:
 """
 
 # ╔═╡ 0c4f5008-0596-11eb-1db3-c14571aee5bb
@@ -53,9 +53,14 @@ flector_path = "img/flector.png";flector = load(flector_path)
 
 # ╔═╡ 381b8ac4-0598-11eb-23bc-03663f91c2f3
 md""" 
-Por inspección vemos que el lugar donde el momento flector es igual a cero se encuentra en el tramos $ C \leq x < D $ el cuál equivale al tramo $ 6 \leq x < 10$ , por lo tanto la ecuación que vamos a usar para determinar el valor de $x$ donde el momento flector es igual a $0$ será:
+Analizando la gráfica se deduce que el intervalo donde el momento flector es igual a cero se encuentra en el tramo $C \le x < D$, el cual equivale al tramo $6 \leq x < 10$. Por lo tanto, la función que se utiliza para determinar el valor de $x$ donde el momento flector es tiene un valor de $0$ es:
 
 $$M(x) = -185x+1650$$
+"""
+
+# ╔═╡ 7e7e9a30-0726-11eb-3582-895aad569107
+md"""
+Con esto definido, se puede aplicar más fácilmente el método de la Bisección. Se crea la función con los parámetros de entrada Bisección(xl, xu, f, tol, ea) y parámetros de salida [xr, iter]
 """
 
 # ╔═╡ aa3d2694-0598-11eb-3b34-11a65f96e210
@@ -80,7 +85,7 @@ end
 begin
 	M(x) = -185*x +1650;
 	xra, iter = biseccion(6,10,M,0.01);
-	"A una distancia de $xra pies el momento flector es igual a 0, el método le tomo $iter iteraciones encontrar este valor"
+	"A una distancia de $xra pies, el momento flector es igual a 0. El método le tomó $iter iteraciones encontrar este valor"
 end
 
 # ╔═╡ cc74b18a-059a-11eb-3167-8525aeee8f3f
@@ -103,29 +108,29 @@ Haga el ejercicio hasta que el error aproximado caiga por debajo del 1 % o el n�
 md"""
 
 ### Desarrollo
-Lo primero que vamos a hacer es encontrar una expresión más manejable para poder realizar los cálculos de una mejor manera.
+El primer paso a realizar es encontrar una expresión más manejable para poder realizar los cálculos de una mejor manera.
 
 $$0 = 1 -\frac{Q^2}{gA_c^3}B  \hspace{3mm}\rightarrow\hspace{3mm} \frac{Q^2}{gA_c^3}B = 1 \hspace{3mm}\rightarrow\hspace{3mm} \frac{Q^2}{g} = \frac{A_c^3}{B} \hspace{3mm}\rightarrow\hspace{3mm} 0 = \frac{A_c^3}{B} - \frac{Q^2}{g}$$
 
-Si realizamos el reemplazo de las expresiones $\displaystyle A_c = 3y + \frac{y^2}{2} \hspace{3mm} \& \hspace{3mm} B = 3 + y$  la función a evaluar sería:
+Si realiza el reemplazo de las expresiones $\displaystyle A_c = 3y + \frac{y^2}{2} \hspace{3mm} \& \hspace{3mm} B = 3 + y$  la función a evaluar sería:
 
 $$f_y = 0 = \frac{\big(3y+\frac{y^2}{2}\big)^3}{3 + y} - \frac{20^2}{9.81} \hspace{3mm}\rightarrow\hspace{3mm} f_y = \frac{\big(3y+\frac{y^2}{2}\big)^3}{3 + y} - 40.7747$$
 
-Con el fin de aplicar el método de Newton - Raphson calculamos la derivada de la función:
+Con el fin de aplicar el método de Newton - Raphson calculamos se calcula la derivada de la función:
 
 $$f'_y = \frac{(3y+9)\big(\frac{y^2}{2}+3y\big)^2}{y+3} - \frac{\big(\frac{y^2}{2} + 3y \big)^3}{(y+3)^2}$$
 
 #### a) Graficamente
 
-Primero graficamos la función para poder encontrar el punto aproximado y graficamente ver donde se encuentra la raiz
+Primero se grafica la función para poder encontrar el punto aproximado y de manera gráfica o esquemática ver dónde se encuentra la raiz.
 
-Donde podemos ver que la raiz se encuentra aproximadamente en el valor de $y = 1.51$
+Así, la raiz se encuentra aproximadamente en el valor de $y = 1.51$
 """
 
 # ╔═╡ 583ec42c-05ae-11eb-1a75-051d43500d23
 md"""
 ### b) Bisección
-Teniendo formulada la función solamente debemos cambiar la función a evaluar y los límites del intervalo.
+Teniendo formulada la función, solamente se debe cambiar la función a evaluar y los límites del intervalo.
 """
 
 # ╔═╡ 095a0834-05af-11eb-2a36-d1d1e179e27d
@@ -191,7 +196,7 @@ donde $\Delta P = $ caída de presión [Pa], $f =$ factor de fricción [-], $L =
 md"""
 ### Desarrollo
 
-Gracias a los datos que nos da el problema es fácil ver que las incognitas a encontrar son la cantidad de caudales dentro del sistema menos 1, pues el valor de $Q_1 = 1m^3/s$, esto nos da un numero de incognitas igual a 9, por lo tanto debemos tener un sistema de 9 ecuaciones lineales con nueves incognitas. El método lineal nos permite convertir la ecuacion no lineal dada para $\Delta P$ en una ecuación lineal, asi que usaremos este método para resolver el sistema.
+Gracias a los datos brindados en el problema, es fácil ver que las incógnitas a encontrar son la cantidad de caudales dentro del sistema menos 1, pues el valor de ya se conoce el valor del caudal $1$, el cual es $Q_1 = 1m^3/s$. Con esto, se obtiene un número de incógnitas igual a 9, por lo que, es necesario obtener un sistema de 9 ecuaciones lineales con nueves incógnitas. El método lineal, permite convertir la ecuación no lineal dada para $\Delta P$ en una ecuación lineal, así que se utiliza este método para resolver el sistema.
 """
 
 # ╔═╡ 27dd8786-065e-11eb-0f4b-1ddcb3e6c6f9
@@ -206,18 +211,17 @@ Donde:
 
 $$\displaystyle C_i = \frac{16}{\pi^2}\frac{fL_i\rho}{2D^5}$$
 
-Para linealizar las ecuaciones cada término $\pm C_i(Q_i^2)$ lo convertiremos en el término $\pm C_iQ_i^*Q_i$, donde el valor de $Q_i^*$ se le conoce como el canal supuesto el cual tiene un valor semilla arbitrario, pero n-ésima iteración su valor será igual a:
+Para linealizar las ecuaciones, cada término $\pm C_i(Q_i^2)$ se convierte en el término $\pm C_iQ_i^*Q_i$, donde el valor de $Q_i^*$ se le conoce como el caudal supuesto, el cual tiene un valor semilla arbitrario; pero en la n-ésima iteración su valor será igual a:
 
-$$Q_n = \frac{Q_{n-1} - Q_{n-2}}{2}$$ 
+$$Q_n = \frac{Q_{n-1} + Q_{n-2}}{2}$$ 
 
-Es decir el promedio entre el Caudal asumido en la iteración anterior y el Caudal obtenido en la iteración anterior.
+Es decir, el promedio entre el caudal asumido en la iteración anterior y el caudal obtenido en la iteración anterior a ésta.
 """
 
 # ╔═╡ 0fef8ab6-065e-11eb-3903-cfbc89172dad
 md"""
 ### Ecuaciones de nodo
-
-Partimos de tres ecuaciones que el problema nos da y luego planteamos otras 3 para sumar 9 ecuaciones en total, 6 de nodo y 3 de circuito.
+Se parte de tres ecuaciones que el problema brinda y luego se plantean otras 3 para sumar 9 ecuaciones en total, 6 de nodo y 3 de circuito.
 
 $$Q_1 = Q_2 + Q_3$$
 $$Q_3 = Q_4 + Q_5 \hspace{3mm}\rightarrow\hspace{3mm} 0 = -Q_3 + Q_4 + Q_5$$
@@ -229,6 +233,11 @@ $$Q_{10}= Q_2 + Q_9 \hspace{3mm}\rightarrow\hspace{3mm} 0 =  Q_2 + Q_9 - Q_{10}$
 """
 
 
+
+# ╔═╡ e61c3460-11ab-11eb-0910-3f1bfb7eb429
+md"""
+Con las ecuaciones de circuito y las ecuaciones de nodo, se crea el siguiente sistema matricial:
+"""
 
 # ╔═╡ 876e567e-0660-11eb-2906-91173842bfad
 md"""
@@ -248,9 +257,9 @@ $$\begin{bmatrix}
 \begin{bmatrix} Q_2\\Q_3\\Q_4\\Q_5\\Q_6\\Q_7\\Q_8\\Q_9\\Q_{10}\\ \end{bmatrix}=
 \begin{bmatrix} 0 \\ 0 \\ 0 \\ 1 \\ 0 \\ 0 \\ 0 \\ 0 \\ 0 \\ \end{bmatrix}$$
 
-El valor de 1 en el vector de términos independientes es iguál al caudal dado de $Q_1 = 1m^3/s$ por lo tanto estas serán las unidades de los caudales obtenidos.
+El valor de 1 en el vector de términos independientes es igual al caudal dado de $Q_1 = 1m^3/s$. Por lo tanto, estas serán las unidades de los caudales obtenidos.
 
-A continuación se planterá la función que resolverá el sistema matricial, y luego se planteará el sistema y se solucionará con la función escrita.
+A continuación se planterá la función que resolverá el sistema matricial y luego se planteará el sistema, para posteriormente obtener una solución con la función escrita.
 """
 
 # ╔═╡ aa576bf0-0663-11eb-1b89-35d73b118f51
@@ -293,9 +302,58 @@ end
 
 # ╔═╡ d25fa93e-0666-11eb-0ab3-ad9497f19aa8
 md""" 
-el valor inicial $Q_0$ es el mismo para todos los caudales $Q_i$ y se supuso inicialmente como $Q_i^* = 0.1 m^3/s$
+el valor inicial $Q_0$ es el mismo para todos los caudales $Q_i$ y además, se supone inicialmente como $Q_i^* = 0.1 m^3/s$
 
-Resolviendo el sistema los valores de los caudales $Q_i$  con $i=1,2,\cdots,10$ son:
+Resolviendo el sistema los valores de los caudales $Q_i$  con $i=1,2,\cdots,10$; se obtienen los siguientes caudales:
+"""
+
+# ╔═╡ d4de2ef0-11ac-11eb-25cd-4918d14365d6
+md"""
+## IV Matrices
+Recuerde que una matriz $A$ simétrica y definida positiva admite factorización de Cholesky, es decir, que existe una matriz triangular inferior $L$ tal que $A = L^{T}L$. La factorización de Cholesky de una matriz se puede hacer en Octave/Matlab mediante la instrucción
+$R = chol(A)$ 
+con la cual se obtiene una matriz triangular superior \textbf{$R$}, tal que $R^{T}R = A$. Usted debe escribir un script que utilice la función $chol()$ y le permita solucionar el siguiente sistema de ecuaciones:
+
+$$\begin{bmatrix}
+4 & -1 &  1\\
+-1 & 4.25 & 2.75\\
+1 & 2.75 & 3.5
+\end{bmatrix}
+\begin{bmatrix}
+x_{1} \\
+x_{2} \\
+x_{3}
+\end{bmatrix}
+=
+\begin{bmatrix}
+-3 \\
+15.75 \\
+17
+\end{bmatrix}$$
+
+Utilice esta metodología para resolver un sistema asociado a una matriz simétrica y definida positiva de la colección Matrix Market https://math.nist.gov/
+MatrixMarket/data/Harwell-Boeing/
+"""
+
+# ╔═╡ 5d02d320-11ae-11eb-0b80-7b34e7119c1d
+md"""
+### Desarrollo
+
+Teniendo claro el método de factorización de Cholesky, el script propuesto para dar solución al sistema de ecuaciones planteado es el siguiente:
+"""
+
+# ╔═╡ d1aa4cc0-11af-11eb-0d0c-bd2597c52cd1
+
+
+# ╔═╡ d744ee60-11af-11eb-2b5b-87a2bf06ad9b
+md"""
+Así, los valores de $x$ para los cuales el sistema de ecuaciones tiene solución son:
+
+$$x_{1} = -2.6562$$ 
+
+$$x_{2} = -1.1250$$
+
+$$x_{3} = 6.5000$$
 """
 
 # ╔═╡ Cell order:
@@ -306,11 +364,12 @@ Resolviendo el sistema los valores de los caudales $Q_i$  con $i=1,2,\cdots,10$ 
 # ╟─569072c0-0594-11eb-05e2-1985663cc0cc
 # ╟─0c4f5008-0596-11eb-1db3-c14571aee5bb
 # ╟─381b8ac4-0598-11eb-23bc-03663f91c2f3
+# ╟─7e7e9a30-0726-11eb-3582-895aad569107
 # ╠═aa3d2694-0598-11eb-3b34-11a65f96e210
 # ╠═76a9ce70-059a-11eb-13b5-13c94ec1c3e0
 # ╟─cc74b18a-059a-11eb-3167-8525aeee8f3f
 # ╟─684870e0-059d-11eb-3df9-21dba1e9dce7
-# ╟─bbe25158-05ac-11eb-3cb6-ed5e87450d02
+# ╠═bbe25158-05ac-11eb-3cb6-ed5e87450d02
 # ╟─583ec42c-05ae-11eb-1a75-051d43500d23
 # ╠═095a0834-05af-11eb-2a36-d1d1e179e27d
 # ╟─f25fb776-05b0-11eb-37bd-09b89dc26a2f
@@ -322,7 +381,12 @@ Resolviendo el sistema los valores de los caudales $Q_i$  con $i=1,2,\cdots,10$ 
 # ╟─6c699394-065a-11eb-26d7-1b895b06b2d4
 # ╟─27dd8786-065e-11eb-0f4b-1ddcb3e6c6f9
 # ╟─0fef8ab6-065e-11eb-3903-cfbc89172dad
+# ╟─e61c3460-11ab-11eb-0910-3f1bfb7eb429
 # ╟─876e567e-0660-11eb-2906-91173842bfad
 # ╠═aa576bf0-0663-11eb-1b89-35d73b118f51
 # ╟─d25fa93e-0666-11eb-0ab3-ad9497f19aa8
 # ╠═da63075a-0663-11eb-2557-272296908264
+# ╟─d4de2ef0-11ac-11eb-25cd-4918d14365d6
+# ╟─5d02d320-11ae-11eb-0b80-7b34e7119c1d
+# ╠═d1aa4cc0-11af-11eb-0d0c-bd2597c52cd1
+# ╟─d744ee60-11af-11eb-2b5b-87a2bf06ad9b
