@@ -164,7 +164,7 @@ begin
 	Cn(y) = ((3*y+((y^2)/2))^3/(3+y)) - 40.7747;
 	DCn(y) = (3*y + 9)*(y^2/2 + 3*y)^2/(y + 3) - (y^2/2 + 3*y)^3/(y + 3)^2;
 	yc, itera = Newton_Raphson(0.5,Cn,DCn,0.01,10);
-	"La profundidad crítica encontrada con el método de Newton-Raphson fue $yc luego de  $itera iteraciones"
+	md"La profundidad crítica encontrada con el método de Newton-Raphson fue $yc luego de  $itera iteraciones"
 end
 
 # ╔═╡ a9445d72-05b4-11eb-0c50-e7b437caf6f2
@@ -276,7 +276,7 @@ end
 
 # ╔═╡ da63075a-0663-11eb-2557-272296908264
 begin
-	using Statistics, Printf
+	using Statistics, Printf, Tablas, JSON2
 	# Valores de f, 𝜌 y D
 	f = 0.005; 𝜌=1.23; D = 0.5;
 	#    Longitudes de cada uno de los Tubos
@@ -298,6 +298,17 @@ begin
 	# Vector de términos independientes
 	b = [   0     0     0     1     0     0     0     0     0]';
 	Q = Sol(N,b,0.1,0.01,3,100);
+	
+#--------------------------------------------------------------------------------
+	Caudales = Dict(
+		"headers" => [Dict("text" => "Tuberia","value" => "Tuberias"),
+					  Dict("text" => "Caudal (m^3/s)","value" => "Caudales")],
+		"Valores" => [Dict(
+				"Tuberias" => i,
+				"Caudales" => round.(Q[i];digits=3))
+				for i in 1:length(Q)]);
+	data_table(JSON2.write(Caudales),'a',9,false)
+		
 end
 
 # ╔═╡ d25fa93e-0666-11eb-0ab3-ad9497f19aa8
@@ -360,21 +371,21 @@ $$x_{3} = 6.5000$$
 # ╟─7dbdf4d8-0587-11eb-0ce5-d397912d3eee
 # ╟─119fe18e-0588-11eb-088b-8120e27e9433
 # ╟─648d66d2-0588-11eb-2b95-4517fc61e165
-# ╠═20e7ed8e-0593-11eb-1afb-7d77519ef9ee
+# ╟─20e7ed8e-0593-11eb-1afb-7d77519ef9ee
 # ╟─569072c0-0594-11eb-05e2-1985663cc0cc
-# ╟─0c4f5008-0596-11eb-1db3-c14571aee5bb
+# ╠═0c4f5008-0596-11eb-1db3-c14571aee5bb
 # ╟─381b8ac4-0598-11eb-23bc-03663f91c2f3
 # ╟─7e7e9a30-0726-11eb-3582-895aad569107
 # ╠═aa3d2694-0598-11eb-3b34-11a65f96e210
 # ╠═76a9ce70-059a-11eb-13b5-13c94ec1c3e0
-# ╟─cc74b18a-059a-11eb-3167-8525aeee8f3f
+# ╠═cc74b18a-059a-11eb-3167-8525aeee8f3f
 # ╟─684870e0-059d-11eb-3df9-21dba1e9dce7
 # ╠═bbe25158-05ac-11eb-3cb6-ed5e87450d02
 # ╟─583ec42c-05ae-11eb-1a75-051d43500d23
-# ╠═095a0834-05af-11eb-2a36-d1d1e179e27d
+# ╟─095a0834-05af-11eb-2a36-d1d1e179e27d
 # ╟─f25fb776-05b0-11eb-37bd-09b89dc26a2f
-# ╠═5291f79e-05b1-11eb-0233-05ca4a69411b
-# ╠═4c4d09fe-05b2-11eb-1609-b1e4adb4b50e
+# ╟─5291f79e-05b1-11eb-0233-05ca4a69411b
+# ╟─4c4d09fe-05b2-11eb-1609-b1e4adb4b50e
 # ╟─a9445d72-05b4-11eb-0c50-e7b437caf6f2
 # ╟─0ab3162a-05b5-11eb-0cc6-1bce617dfa96
 # ╟─29365c30-05b6-11eb-331c-19a485128ce2
@@ -383,9 +394,9 @@ $$x_{3} = 6.5000$$
 # ╟─0fef8ab6-065e-11eb-3903-cfbc89172dad
 # ╟─e61c3460-11ab-11eb-0910-3f1bfb7eb429
 # ╟─876e567e-0660-11eb-2906-91173842bfad
-# ╠═aa576bf0-0663-11eb-1b89-35d73b118f51
+# ╟─aa576bf0-0663-11eb-1b89-35d73b118f51
 # ╟─d25fa93e-0666-11eb-0ab3-ad9497f19aa8
-# ╠═da63075a-0663-11eb-2557-272296908264
+# ╠═da63075a-0663-11eb-2557-272296908264-
 # ╟─d4de2ef0-11ac-11eb-25cd-4918d14365d6
 # ╟─5d02d320-11ae-11eb-0b80-7b34e7119c1d
 # ╠═d1aa4cc0-11af-11eb-0d0c-bd2597c52cd1
